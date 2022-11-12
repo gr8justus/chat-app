@@ -4,7 +4,7 @@
 import http from 'http';
 import express from 'express';
 import { Server } from 'socket.io';
-import { Filter } from 'bad-words';
+import Filter from 'bad-words';
 
 // setup
 const app = express(),
@@ -32,11 +32,12 @@ io.on('connection', (socket) => {
 
         // sends data to all clients
         io.emit('message', message);
-        cb('Delivered!'); // calls the acknowledgement function.
+        cb(); // calls the acknowledgement function.
     });
 
-    socket.on('sendLocation', (location) => {
-        io.emit('message', `https://google.com/maps?q=${location.latitude},${location.longitude}`)
+    socket.on('sendLocation', (location, cb) => {
+        io.emit('message', `https://google.com/maps?q=${location.latitude},${location.longitude}`);
+        cb()
     });
 
     socket.on('disconnect', () => io.emit('message', 'A user has left!'));
