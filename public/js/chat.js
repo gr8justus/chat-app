@@ -3,10 +3,26 @@
 const socket = io(),
     $form = document.querySelector('form'),
     $msgInput = document.querySelector('input'),
-    $shareLocationBtn = document.querySelector('#shareLocation');
+    $shareLocationBtn = document.querySelector('#shareLocation'),
+    $template = document.querySelector('#template').innerHTML,
+    $renderTemplate = document.querySelector('#render-template'),
+    $locateMe = document.querySelector('#locate-me').innerHTML;
 
 // listens for data from server
-socket.on('message', message => console.log(message));
+socket.on('message', message => {
+    // rendering the messages on dom procedure.
+    const html = Mustache.render($template, {
+        message
+    });
+    $renderTemplate.insertAdjacentHTML('beforeend', html);
+});
+
+socket.on('link', location => {
+    const html = Mustache.render($locateMe, {
+        location
+    });
+    $renderTemplate.insertAdjacentHTML('beforeend', html);
+});
 
 $form.addEventListener('submit', (e) => {
     // prevents page from reloading and loosing inputed data
