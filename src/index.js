@@ -15,13 +15,20 @@ const app = express(),
 // express setup
 app.use(express.static('public'));
 
+const printToDoc = arg => {
+    return {
+        result: arg,
+        time: new Date().getTime()
+    }
+}
+
 // listens for data from all connected clients
 io.on('connection', (socket) => {
     console.log('New webSocket connection');
 
     // sends data to a client
-    socket.emit('message', 'Welcome!');
-    socket.broadcast.emit('message', 'A new user has joined!');
+    socket.emit('message', printToDoc('Welcome!'));
+    socket.broadcast.emit('message', printToDoc('A new user has joined!'));
 
     // listens for data from a client
     socket.on('sendMessage', (message, cb) => {
@@ -31,16 +38,17 @@ io.on('connection', (socket) => {
             return cb('Profane words are not allowed');
 
         // sends data to all clients
-        io.emit('message', message);
+        io.emit('message', printToDoc(message));
         cb(); // calls the acknowledgement function.
     });
 
     socket.on('sendLocation', (location, cb) => {
-        io.emit('link', `https://google.com/maps?q=${location.latitude},${location.longitude}`);
+        const toPrint = `https://google.com/maps?q=${location.latitude},${location.longitude}`;
+        io.emit('link', printToDoc(toPrint));
         cb()
     });
 
-    socket.on('disconnect', () => io.emit('message', 'A user has left!'));
+    socket.on('disconnect', () => io.emit('message', printToDoc('A user has left!')));
 });
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));

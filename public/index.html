@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="socket.io/socket.io.js" defer></script>
     <script src="./js/chat.js" defer></script>
 </head>
@@ -23,12 +24,12 @@
 
     <script id="template" type="text/html">
         <div>
-            <p>{{message}}</p>
+            <p>{{createdAt}} - {{message}}</p>
         </div>
     </script>
     <script id="locate-me" type="text/html">
         <div>
-            <p><a href="{{location}}" target="_blank">My current location<a></p>
+            <p>{{createdAt}} - <a href="{{location}}" target="_blank">My current location<a></p>
         </div>
     </script>
 </body>

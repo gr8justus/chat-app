@@ -9,17 +9,19 @@ const socket = io(),
     $locateMe = document.querySelector('#locate-me').innerHTML;
 
 // listens for data from server
-socket.on('message', message => {
-    // rendering the messages on dom procedure.
+socket.on('message', ({ result, time }) => {
+    // procedure for rendering output on the dom
     const html = Mustache.render($template, {
-        message
+        message: result,
+        createdAt: moment(time).format('H:mm')
     });
     $renderTemplate.insertAdjacentHTML('beforeend', html);
 });
 
-socket.on('link', location => {
+socket.on('link', ({ result, time }) => {
     const html = Mustache.render($locateMe, {
-        location
+        location: result,
+        createdAt: moment(time).format('H:mm')
     });
     $renderTemplate.insertAdjacentHTML('beforeend', html);
 });
