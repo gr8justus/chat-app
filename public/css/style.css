@@ -1,0 +1,78 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font: 1rem;
+}
+
+body, .container, .sidebar, .main, .chat-message, form {
+    display: flex;
+}
+
+body, .main {
+    flex-direction: column;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.container, .sidebar, form {
+    flex: auto;
+}
+
+.sidebar {
+    width: 30%;
+    background: grey;
+}
+
+.main {    
+    width: 70%;
+    gap: 64px;
+    border-left: 16px solid gainsboro;
+    border-right: 16px solid gainsboro;
+    padding: 16px;
+}
+
+.chat-message, form {
+    gap: 16px;
+}
+
+.chat-message {
+    margin-top: auto;
+}
+
+input {
+    width: 95%;
+    padding: 8px;
+}
+
+button {
+    color: white;
+    background: royalblue;
+    border: 0;
+    padding: 5px 8px;
+}
+
+#shareLocation:disabled {
+    background: #4169e170;
+    color: #fff7;
+    border: 0;
+}
+
+div {
+    margin-bottom: 10px;
+}
+
+p {
+    margin-top: 4px;
+}
+
+.username {
+    font: 700 1.2em arial;
+    margin-right: 1em;
+}
+
+.time {
+    color: #0008;
+}
