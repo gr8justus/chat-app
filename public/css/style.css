@@ -56,7 +56,6 @@ body {
     width: 75%;
     gap: 64px;
     border-left: 16px solid gainsboro;
-    border-right: 16px solid gainsboro;
     padding: 16px;
 }
 
@@ -87,7 +86,7 @@ button {
 }
 
 #render-template div {
-    margin-bottom: 10px;
+    margin-bottom: 1em;
 }
 
 #render-template p {

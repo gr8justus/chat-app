@@ -11,6 +11,29 @@ const socket = io(),
 
 const { username, room } = Qs.parse(location.search, {ignoreQueryPrefix: true});
 
+// scrolls down the document as content fills the viewport
+const autoScroll = () => {
+    // select latest message
+    const $newMsg = $renderTemplate.lastElementChild;
+
+    // Height of the latest message
+    const extraLen = parseInt(getComputedStyle($newMsg).marginBottom),
+        newMsgHeight = $newMsg.offsetHeight + extraLen;
+
+    // Visible height
+    const visibleHeight = $renderTemplate.offsetHeight;
+
+    // Messages container height
+    const containerHeight = $renderTemplate.scrollHeight;
+
+    //  Calculates how far I have scrolled
+    const scrollOffset = $renderTemplate.scrollTop + visibleHeight;
+
+    if (containerHeight - newMsgHeight <= scrollOffset) {
+        $renderTemplate.scrollTop = $renderTemplate.scrollHeight;
+    }
+}
+
 // listens for data from server
 socket.on('message', ({ username, result, time }) => {
     // procedure for rendering output on the dom
@@ -20,6 +43,7 @@ socket.on('message', ({ username, result, time }) => {
         createdAt: moment(time).format('H:mm')
     });
     $renderTemplate.insertAdjacentHTML('beforeend', html);
+    autoScroll();
 });
 
 socket.on('link', ({ username, result, time }) => {
@@ -29,6 +53,7 @@ socket.on('link', ({ username, result, time }) => {
         createdAt: moment(time).format('H:mm')
     });
     $renderTemplate.insertAdjacentHTML('beforeend', html);
+    autoScroll();
 });
 
 socket.on('roomData', ({ room, users }) => {
