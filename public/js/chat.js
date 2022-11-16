@@ -8,18 +8,22 @@ const socket = io(),
     $renderTemplate = document.querySelector('#render-template'),
     $locateMe = document.querySelector('#locate-me').innerHTML;
 
+const { username, room } = Qs.parse(location.search, {ignoreQueryPrefix: true});
+
 // listens for data from server
-socket.on('message', ({ result, time }) => {
+socket.on('message', ({ username, result, time }) => {
     // procedure for rendering output on the dom
     const html = Mustache.render($template, {
+        username,
         message: result,
         createdAt: moment(time).format('H:mm')
     });
     $renderTemplate.insertAdjacentHTML('beforeend', html);
 });
 
-socket.on('link', ({ result, time }) => {
+socket.on('link', ({ username, result, time }) => {
     const html = Mustache.render($locateMe, {
+        username,
         location: result,
         createdAt: moment(time).format('H:mm')
     });
@@ -63,4 +67,11 @@ $shareLocationBtn.addEventListener('click', () => {
             console.log('Location shared')
         });
     });
+});
+
+socket.emit('join', { username, room }, error => {
+    if (error) {
+        alert(error);
+        location.href = '/';
+    }
 });

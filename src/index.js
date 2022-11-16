@@ -5,6 +5,7 @@ import http from 'http';
 import express from 'express';
 import { Server } from 'socket.io';
 import Filter from 'bad-words';
+import { addUser, removeUser, getUser, getUsersInRoom } from './utils/users.js';
 
 // setup
 const app = express(),
@@ -15,8 +16,9 @@ const app = express(),
 // express setup
 app.use(express.static('public'));
 
-const printToDoc = arg => {
+const printToDoc = (username, arg) => {
     return {
+        username,
         result: arg,
         time: new Date().getTime()
     }
@@ -26,9 +28,20 @@ const printToDoc = arg => {
 io.on('connection', (socket) => {
     console.log('New webSocket connection');
 
-    // sends data to a client
-    socket.emit('message', printToDoc('Welcome!'));
-    socket.broadcast.emit('message', printToDoc('A new user has joined!'));
+    socket.on('join', ({ username, room }, cb) => {
+        const { error, user } = addUser({ id: socket.id, username, room });
+        console.log(user);
+
+        if (error)
+            return cb(error);
+
+        socket.join(user.room);
+
+        // sends data to a client
+        socket.emit('message', printToDoc('Admin', 'Welcome!'));
+        socket.broadcast.to(user.room).emit('message', printToDoc(`${user.username} has joined!`));
+        cb();
+    });
 
     // listens for data from a client
     socket.on('sendMessage', (message, cb) => {
@@ -37,18 +50,25 @@ io.on('connection', (socket) => {
         if (filter.isProfane(message))
             return cb('Profane words are not allowed');
 
+        const user = getUser(socket.id);        
         // sends data to all clients
-        io.emit('message', printToDoc(message));
+        io.to(user.room).emit('message', printToDoc(user.username, message));
         cb(); // calls the acknowledgement function.
     });
 
     socket.on('sendLocation', (location, cb) => {
+        const user = getUser(socket.id);
         const toPrint = `https://google.com/maps?q=${location.latitude},${location.longitude}`;
-        io.emit('link', printToDoc(toPrint));
+        io.to(user.room).emit('link', printToDoc(user.username, toPrint));
         cb()
     });
 
-    socket.on('disconnect', () => io.emit('message', printToDoc('A user has left!')));
+    socket.on('disconnect', () => {
+        const user = removeUser(socket.id);
+
+        if (user)
+            io.to(user.room).emit('message', printToDoc(`${user.username} has left!`));
+    });
 });
 
 server.listen(port, () => console.log(`Server is running on port ${port}`));
