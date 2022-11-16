@@ -30,7 +30,6 @@ io.on('connection', (socket) => {
 
     socket.on('join', ({ username, room }, cb) => {
         const { error, user } = addUser({ id: socket.id, username, room });
-        console.log(user);
 
         if (error)
             return cb(error);
@@ -40,6 +39,10 @@ io.on('connection', (socket) => {
         // sends data to a client
         socket.emit('message', printToDoc('Admin', 'Welcome!'));
         socket.broadcast.to(user.room).emit('message', printToDoc(`${user.username} has joined!`));
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        });
         cb();
     });
 
@@ -66,8 +69,13 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         const user = removeUser(socket.id);
 
-        if (user)
+        if (user) {
             io.to(user.room).emit('message', printToDoc(`${user.username} has left!`));
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room)
+            });
+        }
     });
 });
 

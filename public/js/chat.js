@@ -4,9 +4,10 @@ const socket = io(),
     $form = document.querySelector('form'),
     $msgInput = document.querySelector('input'),
     $shareLocationBtn = document.querySelector('#shareLocation'),
-    $template = document.querySelector('#template').innerHTML,
     $renderTemplate = document.querySelector('#render-template'),
-    $locateMe = document.querySelector('#locate-me').innerHTML;
+    $template = document.querySelector('#template').innerHTML,
+    $locateMe = document.querySelector('#locate-me').innerHTML,
+    $sidebarTemplate = document.querySelector('#sidebar-template').innerHTML;
 
 const { username, room } = Qs.parse(location.search, {ignoreQueryPrefix: true});
 
@@ -28,6 +29,14 @@ socket.on('link', ({ username, result, time }) => {
         createdAt: moment(time).format('H:mm')
     });
     $renderTemplate.insertAdjacentHTML('beforeend', html);
+});
+
+socket.on('roomData', ({ room, users }) => {
+    const html = Mustache.render($sidebarTemplate, {
+        room,
+        users
+    });
+    document.querySelector('.sidebar').innerHTML= html;
 });
 
 $form.addEventListener('submit', (e) => {

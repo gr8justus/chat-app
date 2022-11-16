@@ -9,7 +9,7 @@ body, .container, .sidebar, .main, .chat-message, form, .enclose, .casing, .join
     display: flex;
 }
 
-body, .main, .casing, .join-form {
+body, .main, .casing, .join-form, .sidebar {
     flex-direction: column;
 }
 
@@ -22,12 +22,38 @@ body {
 }
 
 .sidebar {
-    width: 30%;
+    width: 25%;
     background: grey;
+    letter-spacing: 1.5px;
+}
+
+.sidebar h2 {
+    background: navy;
+    color: #fff;
+    font-size: 2rem;
+    padding: 8px 0;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.sidebar h3 {
+    margin-left: 14px;
+}
+
+.sidebar h3 {
+    font-size: 1.5rem;
+    color: gainsboro;
+}
+
+.sidebar ul li {
+    list-style-type: none;
+    margin-left: 1.2rem;
+    margin-top: 8px;
+    font-size: 1.1rem;
 }
 
 .main {    
-    width: 70%;
+    width: 75%;
     gap: 64px;
     border-left: 16px solid gainsboro;
     border-right: 16px solid gainsboro;
@@ -60,7 +86,7 @@ button {
     border: 0;
 }
 
-#render-template {
+#render-template div {
     margin-bottom: 10px;
 }
 

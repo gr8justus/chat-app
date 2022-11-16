@@ -40,6 +40,7 @@
             <p>{{message}}</p>
         </div>
     </script>
+
     <script id="locate-me" type="text/html">
         <div>
             <p>
@@ -48,6 +49,16 @@
             </p>
             <p><a href="{{location}}" target="_blank">My current location<a></p>
         </div>
+    </script>
+
+    <script id="sidebar-template" type="text/html">
+        <h2>{{room}}</h2>
+        <h3>Users</h3>
+        <ul>
+            {{#users}}
+                <li>{{username}}</li>
+            {{/users}}
+        </ul>
     </script>
 </body>
 </html>
