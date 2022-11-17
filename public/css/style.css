@@ -127,3 +127,68 @@ button {
     font-size: 1.2em;
     width: 215.64px;
 }
+
+/* Media queries */
+@media (max-width: 670px) {
+    .sidebar h2 {
+        font-size: 1.5rem;
+    }
+
+    .sidebar h3 {
+        font-size: 1.3rem;
+    }
+
+    .chat-message, form {
+        gap: 8px;
+    }
+
+    input {
+        width: 85%;
+    }
+
+    button {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 30%;
+        letter-spacing: .5px;
+    }
+
+    .main {
+        width: 70%;
+    }
+
+    input {
+        width: 95%;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 400px) {
+    .main {
+        padding: 16px 8px;
+        border-left: 8px solid gainsboro;
+    }
+
+    .chat-message, form {
+        gap: 5px;
+    }
+
+    input {
+        font-size: 0.9rem;
+    }
+
+    .sidebar h2 {
+        font-size: 1.2rem;
+    }
+
+    .sidebar h3 {
+        font-size: 1.05rem;
+    }
+
+    .sidebar {
+        letter-spacing: 0;
+    }
+}
